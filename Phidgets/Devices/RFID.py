@@ -60,12 +60,12 @@ class RFID(Phidget):
         
         if sys.platform == 'win32':
             self.__OUTPUTCHANGEHANDLER = WINFUNCTYPE(c_int, c_void_p, c_void_p, c_int, c_int)
-            self.__TAG2HANDLER = WINFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
-            self.__TAGLOST2HANDLER = WINFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
+            self.__TAGHANDLER = WINFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
+            self.__TAGLOSTHANDLER = WINFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
         elif sys.platform == 'darwin' or sys.platform == 'linux2':
             self.__OUTPUTCHANGEHANDLER = CFUNCTYPE(c_int, c_void_p, c_void_p, c_int, c_int)
-            self.__TAG2HANDLER = CFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
-            self.__TAGLOST2HANDLER = CFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
+            self.__TAGHANDLER = CFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
+            self.__TAGLOSTHANDLER = CFUNCTYPE(c_int, c_void_p, c_void_p, c_char_p, c_int)
 
     def __del__(self):
         """The Destructor Method for the RFID Class
@@ -336,7 +336,7 @@ class RFID(Phidget):
         protocol = c_int()
         
         try:
-            result = PhidgetLibrary.getDll().CPhidgetRFID_getLastTag2(self.handle, byref(tagString), byref(protocol))
+            result = PhidgetLibrary.getDll().CPhidgetRFID_getLastTag(self.handle, byref(tagString), byref(protocol))
         except RuntimeError:
             raise
         
@@ -362,7 +362,7 @@ class RFID(Phidget):
         protocol = c_int()
         
         try:
-            result = PhidgetLibrary.getDll().CPhidgetRFID_getLastTag2(self.handle, byref(tagString), byref(protocol))
+            result = PhidgetLibrary.getDll().CPhidgetRFID_getLastTag(self.handle, byref(tagString), byref(protocol))
         except RuntimeError:
             raise
         
@@ -422,10 +422,10 @@ class RFID(Phidget):
             self.__onTagHandler = None
         else:
             self.__tagGain = tagHandler
-            self.__onTagHandler = self.__TAG2HANDLER(self.__nativeTagGainEvent)
+            self.__onTagHandler = self.__TAGHANDLER(self.__nativeTagGainEvent)
         
         try:
-            result = PhidgetLibrary.getDll().CPhidgetRFID_set_OnTag2_Handler(self.handle, self.__onTagHandler, None)
+            result = PhidgetLibrary.getDll().CPhidgetRFID_set_OnTag_Handler(self.handle, self.__onTagHandler, None)
         except RuntimeError:
             self.__tagGain = None
             self.__onTagHandler = None
@@ -457,10 +457,10 @@ class RFID(Phidget):
             self.__onTagLostHandler = None
         else:
             self.__tagLoss = tagLostHandler
-            self.__onTagLostHandler = self.__TAGLOST2HANDLER(self.__nativeTagLossEvent)
+            self.__onTagLostHandler = self.__TAGLOSTHANDLER(self.__nativeTagLossEvent)
         
         try:
-            result = PhidgetLibrary.getDll().CPhidgetRFID_set_OnTagLost2_Handler(self.handle, self.__onTagLostHandler, None)
+            result = PhidgetLibrary.getDll().CPhidgetRFID_set_OnTagLost_Handler(self.handle, self.__onTagLostHandler, None)
         except RuntimeError:
             self.__tagLoss = None
             self.__onTagLostHandler = None
