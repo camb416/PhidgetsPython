@@ -18,7 +18,7 @@ The master branch on here has fixed this issue.
 See the important changes here:<br />
 https://github.com/camb416/PhidgetsPython/commit/3b682b7953176eca41a5e9689706bff4d81e7a8a
 
-Screenshot:<br />
+Screenshot:
 ![screenshot](https://raw.github.com/camb416/PhidgetsPython/master/screenshot.png)
 
 There's still an issue with a segfault on quit (as seen above). Will likely get around to that eventually.
